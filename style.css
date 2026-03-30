@@ -1,0 +1,172 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap');
+body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: 'Outfit', 'Segoe UI', sans-serif; -webkit-tap-highlight-color: transparent; touch-action: none; }
+#gameContainer { width: 100%; height: 100%; position: relative; }
+#ui-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; display: none; }
+
+#score {
+  position: absolute; top: 15px; left: 50%; transform: translateX(-50%);
+  color: #fff; font-size: 1.4rem; font-weight: 700;
+  background: linear-gradient(135deg, rgba(20,20,60,0.85), rgba(40,40,100,0.75));
+  padding: 10px 30px; border-radius: 25px;
+  border: 1px solid rgba(100,140,255,0.3);
+  text-shadow: 0 0 10px rgba(100,180,255,0.5);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  white-space: nowrap;
+}
+
+#leaderboard {
+  position: absolute; top: 15px; right: 15px;
+  color: #fff; font-size: 0.85rem;
+  background: linear-gradient(180deg, rgba(10,10,40,0.9), rgba(20,20,60,0.85));
+  padding: 12px 16px; border-radius: 14px;
+  min-width: 200px;
+  border: 1px solid rgba(100,140,255,0.2);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 25px rgba(0,0,0,0.5);
+}
+.lb-title { font-size: 0.7rem; font-weight: 800; letter-spacing: 3px; color: #88aaff; text-align: center; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid rgba(100,140,255,0.2); }
+.lb-row { display: flex; align-items: center; gap: 4px; padding: 3px 6px; border-radius: 6px; margin: 2px 0; font-size: 0.85rem; }
+.lb-row:nth-child(2) { font-size: 1rem; font-weight: 700; color: #ffd700; }
+.lb-row:nth-child(3) { color: #c0c0c0; }
+.lb-row:nth-child(4) { color: #cd7f32; }
+.lb-you { background: rgba(68,136,255,0.25); border: 1px solid rgba(68,136,255,0.4); font-weight: 700; color: #66ccff !important; }
+.lb-size { margin-left: auto; font-weight: 700; opacity: 0.8; }
+.lb-rank { min-width: 22px; text-align: right; opacity: 0.5; }
+.lb-sep { text-align: center; color: rgba(255,255,255,0.3); font-size: 0.8rem; margin: 2px 0; }
+
+#waiting-overlay { position: absolute; inset: 0; display: none; justify-content: center; align-items: center; background: rgba(0,0,0,0.7); color: #fff; font-size: 1.5rem; z-index: 100; }
+
+#main-menu {
+  position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center;
+  background: linear-gradient(135deg, #050520 0%, #0a0a3a 40%, #151550 100%); z-index: 200;
+  overflow: hidden;
+}
+#main-menu::before {
+  content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(68,136,255,0.08) 0%, transparent 70%);
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+}
+#main-menu h1 {
+  font-size: 5rem; color: #fff; margin-bottom: 5px; letter-spacing: 8px;
+  text-shadow: 0 0 30px #4488ff, 0 0 60px #4488ff, 0 0 90px rgba(68,136,255,0.4);
+  position: relative; font-weight: 900;
+}
+#main-menu .subtitle { color: #6688cc; font-size: 1.1rem; margin-bottom: 30px; letter-spacing: 5px; text-transform: uppercase; position: relative; }
+
+#username-input {
+  width: 240px; padding: 14px 20px; margin-bottom: 20px; font-size: 1.2rem; font-weight: 600;
+  font-family: 'Outfit', sans-serif;
+  border: 2px solid rgba(68,136,255,0.4); background: rgba(10,10,40,0.8);
+  color: #fff; border-radius: 14px; text-align: center; outline: none;
+  transition: all 0.3s; letter-spacing: 1px;
+  box-shadow: 0 0 15px rgba(68,136,255,0.1);
+  position: relative;
+}
+#username-input::placeholder { color: rgba(150,170,220,0.5); }
+#username-input:focus { border-color: #4488ff; box-shadow: 0 0 25px rgba(68,136,255,0.3); }
+
+#main-menu button {
+  width: 240px; padding: 16px 0; margin: 8px; font-size: 1.3rem; font-weight: 600;
+  font-family: 'Outfit', sans-serif;
+  border: 2px solid rgba(68,136,255,0.5); background: rgba(68,136,255,0.1);
+  color: #fff; border-radius: 14px; cursor: pointer; transition: all 0.3s;
+  position: relative; letter-spacing: 1px;
+  box-shadow: 0 0 20px rgba(68,136,255,0.1);
+}
+#main-menu button:hover { background: rgba(68,136,255,0.3); transform: scale(1.05); box-shadow: 0 0 30px rgba(68,136,255,0.3); border-color: #4488ff; }
+
+#color-picker { display: none; position: absolute; inset: 0; flex-direction: column; justify-content: center; align-items: center; background: rgba(5,5,30,0.97); z-index: 210; }
+#color-picker h2 { color: #fff; font-size: 2rem; margin-bottom: 25px; letter-spacing: 2px; }
+#color-grid { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; max-width: 320px; }
+#color-grid .color-swatch { width: 52px; height: 52px; border-radius: 12px; cursor: pointer; border: 3px solid transparent; transition: all 0.2s; box-shadow: 0 2px 10px rgba(0,0,0,0.4); }
+#color-grid .color-swatch:hover { transform: scale(1.2); }
+#color-grid .color-swatch.selected { border-color: #fff; box-shadow: 0 0 20px rgba(255,255,255,0.5), 0 2px 10px rgba(0,0,0,0.4); transform: scale(1.1); }
+#color-back { margin-top: 30px; padding: 12px 35px; font-size: 1.1rem; font-family: 'Outfit', sans-serif; border: 2px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.05); color: #fff; border-radius: 10px; cursor: pointer; transition: all 0.2s; }
+#color-back:hover { background: rgba(255,255,255,0.15); border-color: #fff; }
+
+#death-screen { display: none; position: absolute; inset: 0; flex-direction: column; justify-content: center; align-items: center; background: rgba(10,0,0,0.92); z-index: 200; }
+#death-screen h1 { font-size: 4rem; font-weight: 900; color: #ff3333; text-shadow: 0 0 30px #ff0000, 0 0 60px rgba(255,0,0,0.4); margin-bottom: 10px; letter-spacing: 5px; }
+#death-screen .death-stats { color: #aaa; font-size: 1.3rem; margin-bottom: 35px; }
+#death-screen button { padding: 16px 45px; font-size: 1.3rem; font-family: 'Outfit', sans-serif; font-weight: 600; border: 2px solid #ff4444; background: rgba(255,68,68,0.15); color: #fff; border-radius: 14px; cursor: pointer; transition: all 0.3s; margin: 6px; }
+#death-screen button:hover { background: rgba(255,68,68,0.4); transform: scale(1.05); box-shadow: 0 0 25px rgba(255,68,68,0.3); }
+#btn-ad-revive { border-color: #44cc44 !important; background: rgba(68,204,68,0.15) !important; animation: adPulse 2s infinite; }
+#btn-ad-revive:hover { background: rgba(68,204,68,0.4) !important; box-shadow: 0 0 25px rgba(68,204,68,0.3) !important; }
+@keyframes adPulse { 0%,100% { box-shadow: 0 0 10px rgba(68,204,68,0.2); } 50% { box-shadow: 0 0 30px rgba(68,204,68,0.5); } }
+
+#win-screen { display: none; position: absolute; inset: 0; flex-direction: column; justify-content: center; align-items: center; background: rgba(10,8,0,0.92); z-index: 200; }
+#win-screen h1 { font-size: 4rem; font-weight: 900; color: #ffd700; text-shadow: 0 0 30px #ffaa00, 0 0 60px rgba(255,170,0,0.4); margin-bottom: 10px; letter-spacing: 3px; }
+#win-screen .win-stats { color: #ccc; font-size: 1.3rem; margin-bottom: 35px; }
+#win-screen button { padding: 16px 45px; font-size: 1.3rem; font-family: 'Outfit', sans-serif; font-weight: 600; border: 2px solid #ffd700; background: rgba(255,215,0,0.15); color: #fff; border-radius: 14px; cursor: pointer; transition: all 0.3s; }
+#win-screen button:hover { background: rgba(255,215,0,0.4); transform: scale(1.05); box-shadow: 0 0 25px rgba(255,215,0,0.3); }
+
+#progress-bar-container {
+  position: absolute; top: 70px; left: 50%; transform: translateX(-50%);
+  text-align: center; color: #fff;
+}
+#progress-label { font-size: 0.85rem; margin-bottom: 4px; text-shadow: 0 0 8px rgba(100,180,255,0.5); }
+#progress-bar {
+  width: 220px; height: 14px; border-radius: 7px;
+  background: rgba(20,20,60,0.8); border: 1px solid rgba(100,140,255,0.3);
+  overflow: hidden;
+}
+#progress-fill {
+  height: 100%; width: 0%; border-radius: 7px;
+  background: linear-gradient(90deg, #4488ff, #44ffaa);
+  transition: width 0.3s;
+}
+
+.color-swatch.locked { position: relative; opacity: 0.5; cursor: default; }
+.color-swatch.locked::after {
+  content: attr(data-req); position: absolute; bottom: -16px; left: 50%; transform: translateX(-50%);
+  font-size: 0.55rem; color: #ffaa00; white-space: nowrap;
+}
+.color-swatch.locked:hover { transform: scale(1.0); }
+
+/* Mobile joystick */
+#mobile-joystick {
+  display: none; position: absolute; bottom: 40px; left: 40px;
+  width: 120px; height: 120px; border-radius: 50%;
+  background: rgba(255,255,255,0.08); border: 2px solid rgba(255,255,255,0.2);
+  z-index: 300; touch-action: none; pointer-events: auto;
+}
+#joystick-knob {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 50px; height: 50px; border-radius: 50%;
+  background: rgba(68,136,255,0.5); border: 2px solid rgba(68,136,255,0.8);
+  transition: none;
+}
+#mobile-boost-btn {
+  display: none; position: absolute; bottom: 60px; right: 40px;
+  width: 80px; height: 80px; border-radius: 50%;
+  background: rgba(255,136,0,0.3); border: 2px solid rgba(255,136,0,0.6);
+  color: #fff; font-size: 0.9rem; font-weight: 700; font-family: 'Outfit', sans-serif;
+  z-index: 300; pointer-events: auto;
+  display: none; justify-content: center; align-items: center; text-align: center;
+  line-height: 1.1;
+}
+
+/* Power-up indicator */
+#pu-indicator {
+  position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%);
+  color: #fff; font-size: 1.2rem; font-weight: 700;
+  background: rgba(20,20,60,0.85); padding: 8px 24px; border-radius: 20px;
+  border: 1px solid rgba(100,140,255,0.3);
+  text-shadow: 0 0 10px rgba(100,180,255,0.5);
+}
+
+@media (max-width: 768px) {
+  #main-menu h1 { font-size: 3rem; letter-spacing: 4px; }
+  #main-menu .subtitle { font-size: 0.8rem; }
+  #username-input { width: 200px; font-size: 1rem; padding: 12px 16px; }
+  #main-menu button { width: 200px; font-size: 1.1rem; padding: 14px 0; }
+  #score { font-size: 1rem; padding: 8px 16px; top: 10px; }
+  #leaderboard { font-size: 0.7rem; min-width: 150px; padding: 8px 10px; top: 10px; right: 10px; }
+  #progress-bar-container { top: 55px; }
+  #progress-bar { width: 160px; }
+  #mobile-joystick { display: block; }
+  #mobile-boost-btn { display: flex; }
+  #death-screen h1 { font-size: 2.5rem; }
+  #death-screen button { padding: 14px 30px; font-size: 1.1rem; }
+  #win-screen h1 { font-size: 2.5rem; }
+}
