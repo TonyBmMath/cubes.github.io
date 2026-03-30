@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="gameContainer">
+    <div id="ui-layer">
+      <div id="score">Size: 1</div>
+      <div id="progress-bar-container">
+        <div id="progress-label">0 / 60</div>
+        <div id="progress-bar"><div id="progress-fill"></div></div>
+      </div>
+      <div id="leaderboard"></div>
+    </div>
+    <div id="waiting-overlay">Waiting for players…</div>
+    <div id="main-menu">
+      <h1>CUBES.IO</h1>
+      <p class="subtitle">Eat, Grow, Dominate!</p>
+      <input type="text" id="username-input" placeholder="Enter your name..." maxlength="16" />
+      <button id="btn-play">▶ Play</button>
+      <button id="btn-color">🎨 Choose Color</button>
+    </div>
+    <div id="color-picker">
+      <h2>Choose Your Color</h2>
+      <div id="color-grid"></div>
+      <button id="color-back">← Back</button>
+    </div>
+    <div id="death-screen">
+      <h1>YOU DIED</h1>
+      <p class="death-stats" id="death-stats">Score: 0 | Kills: 0</p>
+      <button id="btn-ad-revive">📺 Watch Ad to Revive</button>
+      <button id="btn-respawn">Return to Menu</button>
+    </div>
+    <div id="win-screen">
+      <h1>🏆 YOU WIN!</h1>
+      <p class="win-stats" id="win-stats">Score: 100 | Kills: 0</p>
+      <button id="btn-win-menu">Return to Menu</button>
+    </div>
+  <div id="mobile-joystick"><div id="joystick-knob"></div></div>
+    <div id="mobile-boost-btn">⚡ BOOST</div>
+  </div>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.182.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.182.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module">
+    import * as THREE from 'three';
+    window.THREE = THREE;
+  </script>
+  <script src="GameObject3D.js"></script>
+  <script src="Player.js"></script>
+  <script src="RemotePlayer.js"></script>
+  <script src="Food.js"></script>
+  <script src="PowerUp.js" defer></script>
+  <script src="Trap.js" defer></script>
+  <script src="Game.js"></script>
+</body>
+</html>
